@@ -3,19 +3,32 @@
   // this file at the end of the <body> tag in my HTML.
 
   var startButton = document.getElementById("start");
-  var timer = document.getElementById("timer");
+  var stopButton = document.getElementById("stop");
+  // var timer = document.getElementById("timer");
   var nextWordButton = document.getElementById("next-word");
+  var skipWordButton = document.getElementById("skip-word");
   var wordDiv = document.getElementById("word");
   var numberCorrectDiv = document.getElementById("number-correct");
   var numberCorrect = 0;
+  var timer;
 
-  startButton.onclick = function(e){
+  startButton.onclick = function() {
+    resetStartWord();
     selectWord();
     startButton.setAttribute("disabled", "disabled");
+    stopButton.removeAttribute("disabled");
+    nextWordButton.removeAttribute("disabled");
+    skipWordButton.removeAttribute("disabled");
     startTimer();
     resetNumberCorrect();
-    resetStartWord();
   };
+
+  stopButton.onclick = function() {
+    stopTimer();
+    stopButton.setAttribute("disabled", "disabled");
+    nextWordButton.setAttribute("disabled", "disabled");
+    skipWordButton.setAttribute("disabled", "disabled");
+  }
 
   nextWordButton.onclick = function() {
     if(selectWord()) {
@@ -23,12 +36,25 @@
     }
   };
 
+  skipWordButton.onclick = function() {
+    selectWord();
+  }
+
   var startTimer = function() {
-    setTimeout(function() {
+    timer = setTimeout(function() {
       startButton.removeAttribute("disabled");
-      nextWordButton.removeAttribute("disabled");
-      wordDiv.innerText = "YA ESTÁ!!";
+      stopButton.setAttribute("disabled", "disabled");
+      nextWordButton.setAttribute("disabled", "disabled");
+      skipWordButton.setAttribute("disabled", "disabled");
+      wordDiv.innerText = "STOP!!";
     }, 120000);
+  };
+
+  var stopTimer = function() {
+    clearTimeout(timer);
+    startButton.removeAttribute("disabled");
+    nextWordButton.removeAttribute("disabled");
+    wordDiv.innerText = "STOP!!";
   };
 
   var resetNumberCorrect = function() {
